@@ -1,3 +1,5 @@
+from maya import cmds
+
 # returns a list of the currently selected objects
 selection = cmds.ls(selection=True)
 if len(selection) == 0:
@@ -11,10 +13,10 @@ selection.sort(key=len, reverse=True)
 print "________________________"
 for obj in selection:
     print ""
-    # the parents of the obejct are added in front and separated by a "|" so we split the string 
+    # the parents of the object are added in front and separated by a "|" so we split the string
     # by "|" and get the last element, which is the current object's name without its parents/full path
     shortName = obj.split("|")[-1]
-    print "name:", shortName
+    print "shortName:", shortName
     
     # returns the type such as mesh, transform, nurbsCurve, camera, etc
     # However, when you select a pCube mesh in the outliner, you are actually selecting it's transform node
@@ -25,11 +27,24 @@ for obj in selection:
     # if there are no children, assign an empty list to "children" instead of assigning "None"
     children = cmds.listRelatives(obj, children=True, fullPath=True) or []
     print "Children:", children
-    print "________________________"
-    if(len(children) == 1):
+    if len(children) == 1:
         child = children[0]
         objType = cmds.objectType(child)
     else:
         objType = cmds.objectType(obj)
     print("Actual objType: " + objType)
-    #print("actual objType: {}".format(objType))
+    # print("actual objType: {}".format(objType))
+    if objType == "mesh":
+        suffix = "geo"  # geometry
+    elif objType == "joint":
+        suffix = "jnt"
+    elif objType == "camera":
+        print("skipping camera")
+        print "________________________"
+        continue
+    else:
+        suffix = "grp" 
+    newName = shortName + "_" + suffix
+    print newName
+    print "________________________"
+    cmds.rename(obj, newName)
