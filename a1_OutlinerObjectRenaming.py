@@ -15,8 +15,15 @@ default_suffix = "GRP"  # group
 # endregion
 
 
-# rename_only_selected allows user to choose if they want to rename all objects or only the currently selected ones
 def rename_objects(rename_only_selected=False):
+	"""
+	This function adds a suffix to objects in the Outliner that represent the object't type
+
+	Args:
+		rename_only_selected: False by default. Set to true to rename only the currently selected objects.
+
+	Returns: A list of all the objects that were renamed.
+	"""
 	# "long" returns the full path so we get the object's parents which allows us to sort
 	selected_objects = cmds.ls(selection=rename_only_selected, dag=True, long=True)
 
@@ -75,3 +82,11 @@ def rename_objects(rename_only_selected=False):
 		print("new name: " + new_name)
 		print("________________________")
 		cmds.rename(obj, new_name)
+
+		# return condensed  list of objects that got renamed and their new names
+		index = selected_objects.index(obj)
+		selected_objects[index] = obj.replace(short_name, new_name)
+
+	print selected_objects
+	return selected_objects
+
