@@ -35,7 +35,7 @@ class GearGenerator(object):  # Inherit from object since Maya uses Python 2.7. 
 		# Thus, the outer faces always start counting at NumberOfSubdivisions * 2 and end at NumberOfSubdivisions * 3 -1
 		# since the upper limit of range() is exclusive, we don't have to do the "-1"
 		outer_side_faces = range(subdivisions_axis * 2, subdivisions_axis * 3, 2)
-		print("outer_side_faces: " + str(outer_side_faces))
+		# print("outer_side_faces: " + str(outer_side_faces))  # the faces that will be extruded
 
 		cmds.select(clear=True)
 
@@ -47,11 +47,11 @@ class GearGenerator(object):  # Inherit from object since Maya uses Python 2.7. 
 
 		# extrudes the selected faces and returns the polyExtrudeFace node that is fed into the pPipeShape node
 		self.extrude = cmds.polyExtrudeFacet(localTranslateZ=length)[0]
-		print("extrude: " + str(self.extrude))
-		# Lists the attributes of the extrude node.
+
+		# print("extrude: " + str(self.extrude))  # the name of the extrude node
+		# print("listAttr: " + str(cmds.listAttr(self.extrude)))  # the list of attributes in the extrude node
 		# The attribute that contains the faces which were extruded is the inputComponents attribute
-		print("listAttr: " + str(cmds.listAttr(self.extrude)))
-		print("getAttr of extrude.inputComponents: " + str(cmds.getAttr(self.extrude + ".inputComponents")))
+		# print("getAttr of extrude.inputComponents: " + str(cmds.getAttr(self.extrude + ".inputComponents")))  # the faces which the extrude node is currently affecting
 
 	def change_teeth(self, teeth=10, length=0.3):
 		"""
@@ -68,8 +68,8 @@ class GearGenerator(object):  # Inherit from object since Maya uses Python 2.7. 
 		for face in side_faces:
 			face_name = "f[%s]" % face
 			face_names.append(face_name)
+		# print("face_names: " + str(face_names))  # the faces that should be extruded in the modified gear
 
-		print("face_names: " + str(face_names))
 		# setAttr has different parameters depending on the type of data we're trying to set https://help.autodesk.com/cloudhelp/2018/CHS/Maya-Tech-Docs/CommandsPython/setAttr.html
 		# In this case we want to set a list of face components on the extrude node's inputComponents attribute
 		# The asterisk unpacks the list and passes the elements as individual arguments
