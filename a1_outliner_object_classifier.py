@@ -87,6 +87,6 @@ def rename_objects(rename_only_selected=False):
 		index = selected_objects.index(obj)
 		selected_objects[index] = obj.replace(short_name, new_name)
 
-	print selected_objects
+	print(selected_objects)
 	return selected_objects
 
